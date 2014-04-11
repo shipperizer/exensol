@@ -10,6 +10,9 @@ def __dictFielding__(Fields):
 		return dictFields	
 
 class Contact:
+
+	fieldMapper=["Address","Town","Postcode","Phone"]
+
 	def __init__(self,name, Fields):
 		self.name=name
 		self.fields={}
@@ -23,7 +26,8 @@ class Contact:
 	def seeContact(self):
 		to_str="Contact %s --- " % self.name
 		for key, value in sorted(self.fields.iteritems()):
-			to_str+="|%s| : %s    " % (key,value)
+			to_str+="|%s| : %s    " % (Contact.fieldMapper[int(key)-1],value)
+		to_str+='\n'
 		return to_str	
 		
 
@@ -43,18 +47,24 @@ class AddressBook:
 			self.Contacts[name].setField(key,value)
 
 	def seeAll(self):
+		contacts=""
 		for key, contact in self.Contacts.iteritems():
-			print contact.seeContact()
-			
+			contacts+=contact.seeContact()
+		return contacts	
 
-aBook=AddressBook()
-with open('addressbook.txt', 'r') as fp:
-    for line in fp:
-        #print line
-        tmp=re.search('(?P<name>[\w, ]*)(.*)',line).groups()
-        person=Contact(tmp[0],tmp[1])
-        #print '\nContact %s : Info %s' % (person.name, str(person.fields))
-        aBook.addContact(tmp[0],tmp[1])
+class AddressBookFixer:
+	def __init__(self):
+		pass
 
-print "---------------------------------------------------------------------"
-aBook.seeAll()
+	def fixAddressBook(self,inputFilename, outputFilename):
+		aBook=AddressBook()
+		with open(inputFilename, 'r') as fp:
+			for line in fp:
+				tmp=re.search('(?P<name>[\w, ]*)(.*)',line).groups()
+				aBook.addContact(tmp[0],tmp[1])
+		f = open(outputFilename,'w')
+		f.write(aBook.seeAll())
+		f.close()
+
+test=AddressBookFixer()
+test.fixAddressBook("addressbook.txt","test")		
