@@ -1,7 +1,7 @@
 import re
 
 def __dictFielding__(Fields):
-		'#2|Ashbourne#3|N17#4|04978563166'
+		##2|Ashbourne#3|N17#4|04978563166
 		new_fields=Fields.strip().split('#')[1:]
 		dictFields={}
 		for field in new_fields:
@@ -19,7 +19,12 @@ class Contact:
 
 	def setField(self, key, value):
 		self.fields[key]=value		
-			
+	
+	def seeContact(self):
+		to_str="Contact %s --- " % self.name
+		for key, value in sorted(self.fields.iteritems()):
+			to_str+="|%s| : %s    " % (key,value)
+		return to_str	
 		
 
 class AddressBook:
@@ -38,17 +43,17 @@ class AddressBook:
 			self.Contacts[name].setField(key,value)
 
 	def seeAll(self):
-		for key, value in self.Contacts.iteritems():
-			print '\nContact %s : Info %s' % (key, str(value.fields))
+		for key, contact in self.Contacts.iteritems():
+			print contact.seeContact()
 			
 
 aBook=AddressBook()
 with open('addressbook.txt', 'r') as fp:
     for line in fp:
-        print line
+        #print line
         tmp=re.search('(?P<name>[\w, ]*)(.*)',line).groups()
         person=Contact(tmp[0],tmp[1])
-        print '\nContact %s : Info %s' % (person.name, str(person.fields))
+        #print '\nContact %s : Info %s' % (person.name, str(person.fields))
         aBook.addContact(tmp[0],tmp[1])
 
 print "---------------------------------------------------------------------"
