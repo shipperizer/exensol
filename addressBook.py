@@ -8,7 +8,7 @@ class Contact:
 		for key, value in dictFields.iteritems():
 			self.fields[key]=value
 
-	def setField(self, key, value)
+	def setField(self, key, value):
 		self.fields[key]=value		
 			
 	def __dictFielding__(self, Fields):
